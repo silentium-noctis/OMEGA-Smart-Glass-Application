@@ -1,4 +1,4 @@
-1. Donwload these files and put them in a folder together
+1. Download these files and put them in a folder together
 2. These are the libraries you will need to install in order to use the features the program offers. Simply copy and paste this line in the terminal of your text editor:
 
 /*
