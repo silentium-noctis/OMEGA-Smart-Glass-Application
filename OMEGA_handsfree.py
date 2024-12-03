@@ -218,7 +218,7 @@ def check_travel_time_and_email():
         return
 
     # API key 
-    api_key = str("AIzaSyA_lFtjlkDXbMTKrKGoOryo3z5oT0W6CLM")
+    api_key = str("example") #API Key
     url = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&"
     response = requests.get(url + f"origins={current}&destinations={to}&key={api_key}")
     data = response.json()
@@ -240,13 +240,13 @@ def check_travel_time_and_email():
 
 # Function to send email
 def send_email():
-    sender = "darrienchen05@gmail.com"
-    recipients = ["rusafi05@gmail.com", "gabriellechenier0@gmail.com", "quanluu3003@gmail.com", "knipehannah7@gmail.com"]
+    sender = "example@gmail.com" #Email sender
+    recipients = ["example1@gmail.com, example2@gmail.com"] #Email receiver
     subject = "Attendance Update - [Omega]"
     message = "Hi,\nI won't be able make it on time for today's meeting.\n\nRegards,\nOmega."
 
     email_content = f"Subject: {subject}\n\n{message}"
-    app_password = "buik cjaf iieh gqjd"
+    app_password = "example" #Your app password
 
     try:
         with smtplib.SMTP("smtp.gmail.com", 587) as s:
