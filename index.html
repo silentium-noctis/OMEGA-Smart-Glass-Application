@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Omega Assistant</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            color: #333;
+        }
+        button, input[type="text"] {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            outline: none;
+        }
+        button {
+            color: white;
+            background-color: #007BFF;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #response {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #555;
+        }
+        .form-container {
+            margin: 20px auto;
+            max-width: 400px;
+            text-align: left;
+        }
+        label {
+            font-size: 16px;
+            color: #555;
+            display: block;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Omega Assistant</h1>
+
+    <!-- Camera Detection Button -->
+    <button id="startCamera">Start Camera Detection</button>
+    <p id="response">Click the button to start object detection.</p>
+
+    <!-- Check Destination Form -->
+    <div class="form-container">
+        <h2>Check Travel Time</h2>
+        <label for="currentLocation">Current Location:</label>
+        <input type="text" id="currentLocation" placeholder="Enter your current location" />
+
+        <label for="destination">Destination:</label>
+        <input type="text" id="destination" placeholder="Enter your destination" />
+
+        <button id="checkTravelTime">Check Travel Time</button>
+        <p id="travelResponse"></p>
+    </div>
+
+    <script>
+        // Helper function for text-to-speech
+        function speak(text) {
+            const speech = new SpeechSynthesisUtterance(text);
+            speech.lang = "en-US";
+            speech.pitch = 1; // Adjust pitch (0 to 2)
+            speech.rate = 1;  // Adjust speed (0.1 to 10)
+            window.speechSynthesis.speak(speech);
+        }
+
+        // Camera Detection
+        document.getElementById('startCamera').addEventListener('click', async () => {
+            const responseElement = document.getElementById('response');
+            responseElement.textContent = "Starting camera detection...";
+            speak("Starting camera detection...");
+
+            try {
+                const response = await fetch('/api/camera', { method: 'GET' });
+                const data = await response.json();
+                responseElement.textContent = data.message;
+                speak(data.message);
+            } catch (error) {
+                const errorMessage = "Error: Unable to start camera detection.";
+                responseElement.textContent = errorMessage;
+                speak(errorMessage);
+            }
+        });
+
+        // Check Travel Time
+        document.getElementById('checkTravelTime').addEventListener('click', async () => {
+            const currentLocation = document.getElementById('currentLocation').value;
+            const destination = document.getElementById('destination').value;
+            const travelResponse = document.getElementById('travelResponse');
+
+            if (!currentLocation || !destination) {
+                const warningMessage = "Please enter both current location and destination.";
+                travelResponse.textContent = warningMessage;
+                speak(warningMessage);
+                return;
+            }
+
+            travelResponse.textContent = "Calculating travel time...";
+            speak("Calculating travel time...");
+
+            try {
+                const response = await fetch('/api/travel-time', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ current: currentLocation, destination: destination }),
+                });
+
+                const data = await response.json();
+                travelResponse.textContent = data.message;
+                speak(data.message);
+            } catch (error) {
+                const errorMessage = "Error: Unable to calculate travel time.";
+                travelResponse.textContent = errorMessage;
+                speak(errorMessage);
+            }
+        });
+    </script>
+</body>
+</html>
