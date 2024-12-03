@@ -94,7 +94,6 @@ def travel_time():
 
 # Run the Flask app on your IPv4 address and make it accessible to others
 if __name__ == '__main__':
-    app.run(host='10.192.86.58', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True) #Enter your IP Address
 
 #10.192.86.58 for eduroam
-#192.168.2.50 for home
